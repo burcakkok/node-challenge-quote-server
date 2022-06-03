@@ -10,7 +10,8 @@
     "start": "nodemon server.js"
   },
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "nodemon": "^2.0.16"
   },
   "license": "MIT"
 }
