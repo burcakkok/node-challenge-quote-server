@@ -1,4 +1,5 @@
 const { response } = require("express");
+const _ = require("lodash");
 // server.js
 // This is where your node app starts
 
@@ -23,8 +24,23 @@ app.get('/quotes', function(request, response) {
 });
 
 app.get('/quotes/random', function(request, response) {
-  response.send(pickFromArray(quotes));
+  response.send(_.sample(quotes));  // lodash
 });
+
+app.get('/quotes/search', (request, response) => {
+  let term = request.query.term;
+  if (term) {
+    term = term.toLowerCase();
+  }
+  const filteredQuotes = quotes.filter(element => {
+    return element.quote.toLowerCase().includes(term) || element.author.toLowerCase().includes(term);
+  });
+  if(filteredQuotes.length == 0) {
+    response.status(404).send(filteredQuotes);
+  }
+  response.send(filteredQuotes);
+});
+
 
 //...END OF YOUR CODE
 
@@ -32,9 +48,9 @@ app.get('/quotes/random', function(request, response) {
 //example: pickFromArray([1,2,3,4]), or
 //example: pickFromArray(myContactsArray)
 //
-function pickFromArray(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
+// function pickFromArray(arr) {
+//   return arr[Math.floor(Math.random() * arr.length)];
+// }
 
 //Start our server so that it listens for HTTP requests!
 let port = 5000;
